@@ -2,6 +2,8 @@
 
 Страница списка звонков по тестовому заданию Skilla.
 
+**Демо:** [skilla-test-task-delta.vercel.app](https://skilla-test-task-delta.vercel.app/)
+
 ## Стек
 
 - React
@@ -50,10 +52,9 @@ npm run dev
 ## Проверки
 
 ```bash
-npm test
 npm run build
 ```
 
 ## Деплой
 
-Проект готов для деплоя на Vercel, Netlify или аналогичный сервис. После публикации добавьте ссылку на деплой в этот раздел.
+Приложение доступно на Vercel: [https://skilla-test-task-delta.vercel.app/](https://skilla-test-task-delta.vercel.app/)
