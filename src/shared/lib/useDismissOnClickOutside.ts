@@ -1,11 +1,18 @@
 import { useEffect, useRef, type RefObject } from 'react'
 
+/** Параметры закрытия оверлея по клику вне области или Escape. */
 interface UseDismissOnClickOutsideParams {
   isOpen: boolean
   onClose: () => void
   containerRef: RefObject<HTMLElement | null>
 }
 
+/**
+ * Закрывает открытый UI при клике вне `containerRef` или нажатии Escape.
+ * Слушатели вешаются только пока `isOpen === true`.
+ *
+ * @param params — флаг открытия, колбэк закрытия и ref контейнера, клики внутри которого игнорируются.
+ */
 export const useDismissOnClickOutside = ({
   isOpen,
   onClose,

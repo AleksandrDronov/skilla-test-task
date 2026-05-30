@@ -7,11 +7,18 @@ import { useCallsFilters } from './useCallsFilters'
 import { useCallsSorting } from './useCallsSorting'
 import { useResettableCallsPage } from './useResettableCallsPage'
 
+/** Пропсы для виджетов тулбара и таблицы страницы звонков. */
 interface UseCallsPageResult {
   toolbar: CallsPageToolbarProps
   table: CallsPageTableProps
 }
 
+/**
+ * Фасад страницы звонков: собирает фильтры, сортировку, пагинацию, данные и аудиозаписи.
+ * Возвращает готовые пропсы для `CallsPageToolbar` и `CallsPageTable`.
+ *
+ * @returns Объект `{ toolbar, table }` для передачи в виджеты без промежуточной логики в UI.
+ */
 export const useCallsPage = (): UseCallsPageResult => {
   const { typeFilter, setTypeFilter, period, setPeriod, dateRange, handleResetFilters } =
     useCallsFilters()

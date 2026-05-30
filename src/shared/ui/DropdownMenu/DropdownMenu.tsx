@@ -19,6 +19,13 @@ type DropdownMenuContextValue = {
 
 const DropdownMenuContext = createContext<DropdownMenuContextValue | null>(null)
 
+/**
+ * Доступ к состоянию compound-компонента `DropdownMenu` из `Trigger` и `Panel`.
+ *
+ * @template T — тип значения выбранной опции.
+ * @returns Контекст меню с типизированными `value` и `handleSelect`.
+ * @throws Если хук вызван вне `<DropdownMenu>`.
+ */
 export const useDropdownMenuContext = <T,>() => {
   const context = useContext(DropdownMenuContext)
 

@@ -19,6 +19,12 @@ const getRecordLoadError = (error: unknown) => {
   return 'Не удалось загрузить запись звонка'
 }
 
+/**
+ * Воспроизведение и скачивание аудиозаписей звонков.
+ * Кэширует blob URL по `call.record`, один активный плеер на страницу.
+ *
+ * @returns ID активной/загружаемой записи, текст ошибки и обработчики play/stop и download.
+ */
 export const useCallAudio = () => {
   const [activeRecordId, setActiveRecordId] = useState<string | null>(null)
   const [loadingRecordId, setLoadingRecordId] = useState<string | null>(null)

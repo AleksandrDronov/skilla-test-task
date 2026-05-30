@@ -3,6 +3,7 @@ import { mapFilterToApiValue, type CallTypeFilter } from '@/features/filter-call
 import { type SortByApiValue, type SortOrder } from '@/features/sort-calls'
 import { type GetCallsQueryParams, useGetCallsQuery } from '@/entities/call'
 
+/** Параметры запроса списка звонков для страницы. */
 interface UseCallsDataParams {
   typeFilter: CallTypeFilter
   dateRange: DateRange
@@ -11,6 +12,12 @@ interface UseCallsDataParams {
   orderApiValue?: SortOrder
 }
 
+/**
+ * Загружает страницу звонков через RTK Query с учётом фильтров, пагинации и сортировки.
+ *
+ * @param params — фильтр типа, диапазон дат, offset и опциональная сортировка для API.
+ * @returns Список звонков, общее число строк, флаги загрузки/ошибки и повтор запроса.
+ */
 export const useCallsData = ({
   typeFilter,
   dateRange,

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, type Dispatch, type SetStateAction } f
 import { env } from '@/shared/config'
 import { getPaginationMeta, type PaginationMeta } from './getPaginationMeta'
 
+/** Входные данные для расчёта пагинации списка звонков. */
 export interface UseCallsPaginationOptions {
   page: number
   setPage: Dispatch<SetStateAction<number>>
@@ -9,6 +10,7 @@ export interface UseCallsPaginationOptions {
   currentResultsCount: number
 }
 
+/** Результат: размер страницы и, при необходимости, метаданные и обработчики «назад»/«вперёд». */
 export interface UseCallsPaginationResult {
   pageSize: number
   pagination?: PaginationMeta
@@ -16,6 +18,14 @@ export interface UseCallsPaginationResult {
   onPaginationNext?: () => void
 }
 
+/**
+ * Пагинация таблицы звонков по ответу API (`total_rows`) и текущей выборке.
+ * Синхронизирует номер страницы, если он выходит за допустимый диапазон.
+ * Если страниц одна и навигация не нужна — возвращает только `pageSize`.
+ *
+ * @param options — текущая страница, сеттер, общее число строк и размер текущей порции.
+ * @returns Метаданные пагинации и обработчики или минимальный объект без навигации.
+ */
 export const useCallsPagination = ({
   page,
   setPage,

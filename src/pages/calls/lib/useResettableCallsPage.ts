@@ -6,6 +6,13 @@ interface PageState {
   page: number
 }
 
+/**
+ * Номер страницы и смещение для пагинации списка звонков.
+ * При смене `resetPageKey` (фильтры, сортировка, период) страница сбрасывается на 1.
+ *
+ * @param resetPageKey — ключ сброса; при изменении текущая страница не сохраняется.
+ * @returns Номер страницы, offset для API и функция смены страницы.
+ */
 export const useResettableCallsPage = (resetPageKey: string) => {
   const [pageState, setPageState] = useState<PageState>(() => ({
     resetKey: resetPageKey,
