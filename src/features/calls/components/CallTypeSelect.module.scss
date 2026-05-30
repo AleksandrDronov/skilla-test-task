@@ -1,0 +1,74 @@
+.root {
+  position: relative;
+  z-index: 5;
+}
+
+.trigger {
+  display: inline-flex;
+  height: 21px;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.arrow {
+  width: 18px;
+  height: 18px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--color-icon);
+    border-bottom: 2px solid var(--color-icon);
+    transform: rotate(45deg);
+  }
+}
+
+.arrowOpen::before {
+  top: 9px;
+  transform: rotate(225deg);
+}
+
+.menu {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  width: 133px;
+  padding: 4px 0;
+  border-radius: 4px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-dropdown);
+}
+
+.option {
+  width: 100%;
+  height: 32px;
+  border: 0;
+  padding: 0 12px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 18px;
+  text-align: left;
+
+  &:hover,
+  &:focus-visible {
+    background: #dee4ff;
+    color: var(--color-text);
+    outline: 0;
+  }
+}
+
+.optionActive {
+  color: var(--color-accent);
+}

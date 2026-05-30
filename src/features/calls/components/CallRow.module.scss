@@ -1,0 +1,87 @@
+.row {
+  height: 65px;
+  border-top: 1px solid #eaf0fa;
+  background: var(--color-surface);
+
+  &:hover {
+    background: #f8fbff;
+
+    .duration {
+      opacity: 0;
+    }
+
+    .player {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+.typeCell {
+  width: 54px;
+  padding-left: 40px;
+}
+
+.timeCell {
+  width: 88px;
+}
+
+.avatarCell {
+  width: 129px;
+}
+
+.callCell {
+  width: 325px;
+}
+
+.sourceCell {
+  width: 214px;
+  color: var(--color-text-secondary);
+}
+
+.gradeCell {
+  width: 461px;
+}
+
+.durationCell {
+  width: 129px;
+  position: relative;
+  padding-right: 0;
+  text-align: right;
+}
+
+.row td {
+  padding-top: 0;
+  padding-bottom: 0;
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 21px;
+  vertical-align: middle;
+}
+
+.contact,
+.company {
+  display: block;
+}
+
+.company {
+  margin-top: 2px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.duration {
+  display: inline-block;
+  padding-right: 40px;
+  transition: opacity 0.16s ease;
+}
+
+.player {
+  position: absolute;
+  top: 8px;
+  right: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease;
+}

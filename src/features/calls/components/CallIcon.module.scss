@@ -1,0 +1,38 @@
+.icon {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow {
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.incoming {
+  color: var(--color-green);
+
+  .arrow {
+    transform: rotate(135deg);
+  }
+}
+
+.outgoing {
+  color: var(--color-accent);
+
+  .arrow {
+    transform: rotate(-45deg);
+  }
+}
+
+.missed {
+  color: var(--color-red);
+
+  .arrow {
+    transform: rotate(135deg);
+  }
+}
