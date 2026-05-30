@@ -22,8 +22,7 @@ npm-debug.log*
 # OS / IDE
 .DS_Store
 .idea/
-.vscode/*
-!.vscode/extensions.json
+.vscode
 
 # Test / coverage
 coverage/
