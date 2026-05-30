@@ -1,5 +1,7 @@
+import clsx from 'clsx'
+import { DropdownMenu } from '@/shared/ui'
 import { getNextPreset, getPreviousPreset } from '../../lib/periodRange'
-import { periodLabels } from '../../model/constants'
+import { periodLabels, periodOrder } from '../../model/constants'
 import type { PeriodPreset } from '../../model/types'
 import styles from './PeriodPicker.module.scss'
 
@@ -13,31 +15,44 @@ export const PeriodPicker = ({ value, onChange }: PeriodPickerProps) => {
   const handleNext = () => onChange(getNextPreset(value))
 
   return (
-    <div className={styles.root} aria-label="Период звонков">
+    <DropdownMenu
+      value={value}
+      onChange={onChange}
+      className={styles.root}
+      ariaLabel="Период звонков"
+    >
       <button
         className={styles.navButton}
         type="button"
         aria-label="Предыдущий период"
         onClick={handlePrevious}
       >
-        ‹
+        <span className={clsx(styles.chevron, styles.chevronLeft)} aria-hidden />
       </button>
-      <button
+
+      <DropdownMenu.Trigger
         className={styles.valueButton}
-        type="button"
-        aria-label={`Текущий период: ${periodLabels[value]}`}
+        ariaLabel={`Текущий период: ${periodLabels[value]}`}
       >
-        <span className={styles.calendarIcon} />
+        <span className={styles.calendarIcon} aria-hidden />
         {periodLabels[value]}
-      </button>
+      </DropdownMenu.Trigger>
+
       <button
         className={styles.navButton}
         type="button"
         aria-label="Следующий период"
         onClick={handleNext}
       >
-        ›
+        <span className={clsx(styles.chevron, styles.chevronRight)} aria-hidden />
       </button>
-    </div>
+
+      <DropdownMenu.Panel
+        options={periodOrder}
+        getOptionLabel={(preset) => periodLabels[preset]}
+        ariaLabel="Выбор периода"
+        placement="right"
+      />
+    </DropdownMenu>
   )
 }

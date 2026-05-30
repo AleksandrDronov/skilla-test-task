@@ -7,8 +7,8 @@ interface SortableColumnHeaderProps {
   label: string
   sortKey: SortByApiValue
   sort: CallsSortState
-  align?: 'left' | 'right'
   onColumnSort: (column: SortByApiValue) => void
+  align?: 'left' | 'right'
 }
 
 const sortOrderLabels = {
@@ -20,8 +20,8 @@ export const SortableColumnHeader = ({
   label,
   sortKey,
   sort,
-  align = 'left',
   onColumnSort,
+  align = 'left',
 }: SortableColumnHeaderProps) => {
   const isActive = sort.sortBy === sortKey
 
@@ -55,27 +55,15 @@ export const SortableColumnHeader = ({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
-      {align === 'right' ? (
-        <span
-          className={clsx(
-            styles.icon,
-            isActive && sort.order === 'ASC' && styles.iconAsc,
-            isActive && sort.order === 'DESC' && styles.iconDesc,
-          )}
-          aria-hidden="true"
-        />
-      ) : null}
       <span>{label}</span>
-      {align === 'left' ? (
-        <span
-          className={clsx(
-            styles.icon,
-            isActive && sort.order === 'ASC' && styles.iconAsc,
-            isActive && sort.order === 'DESC' && styles.iconDesc,
-          )}
-          aria-hidden="true"
-        />
-      ) : null}
+      <span
+        className={clsx(
+          styles.icon,
+          isActive && sort.order === 'ASC' && styles.iconAsc,
+          isActive && sort.order === 'DESC' && styles.iconDesc,
+        )}
+        aria-hidden="true"
+      />
     </button>
   )
 }

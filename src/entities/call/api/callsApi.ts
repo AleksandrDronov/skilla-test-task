@@ -12,7 +12,47 @@ export interface GetCallsQueryParams {
 
 interface GetRecordParams {
   recordId: string
-  partnershipId?: string
+  partnershipId: string
+}
+
+const CALL_RECORD_CONTENT_TYPES = new Set([
+  'audio/mpeg',
+  'audio/x-mpeg',
+  'audio/x-mpeg-3',
+  'audio/mpeg3',
+])
+
+const parseRecordError = async (response: Response): Promise<string> => {
+  try {
+    const data = (await response.json()) as {
+      error?: { description?: string }
+    }
+
+    if (data.error?.description) {
+      return data.error.description
+    }
+  } catch {
+    // ответ не JSON
+  }
+
+  return `Не удалось загрузить запись (код ${response.status})`
+}
+
+const parseRecordBlob = async (response: Response): Promise<Blob> => {
+  const contentTypeHeader = response.headers.get('Content-Type') ?? ''
+
+  if (!response.ok || contentTypeHeader.includes('application/json')) {
+    throw new Error(await parseRecordError(response))
+  }
+
+  const data = await response.blob()
+  const contentType = contentTypeHeader.split(';')[0]?.trim().toLowerCase()
+
+  if (contentType && CALL_RECORD_CONTENT_TYPES.has(contentType)) {
+    return new Blob([data], { type: contentType })
+  }
+
+  return new Blob([data], { type: 'audio/mpeg' })
 }
 
 const normalizeCallsResponse = (response: unknown): CallsResponse => {
@@ -63,9 +103,9 @@ export const callsApi = createApi({
         method: 'POST',
         params: {
           record: recordId,
-          ...(partnershipId ? { partnership_id: partnershipId } : {}),
+          partnership_id: partnershipId,
         },
-        responseHandler: (response) => response.blob(),
+        responseHandler: parseRecordBlob,
       }),
     }),
   }),

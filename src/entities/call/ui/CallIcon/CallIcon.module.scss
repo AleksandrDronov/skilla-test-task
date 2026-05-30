@@ -7,32 +7,19 @@
 }
 
 .arrow {
-  width: 12px;
-  height: 12px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
+  display: block;
+  flex-shrink: 0;
 }
 
 .incoming {
-  color: var(--color-green);
-
-  .arrow {
-    transform: rotate(135deg);
-  }
+  color: var(--color-accent);
 }
 
 .outgoing {
-  color: var(--color-accent);
-
-  .arrow {
-    transform: rotate(-45deg);
-  }
+  color: var(--color-green);
 }
 
-.missed {
+.missed,
+.noAnswer {
   color: var(--color-red);
-
-  .arrow {
-    transform: rotate(135deg);
-  }
 }

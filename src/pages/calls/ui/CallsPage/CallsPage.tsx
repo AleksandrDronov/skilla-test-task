@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useGetCallsQuery } from '@/entities/call'
 import {
   CallTypeSelect,
-  callTypeLabels,
   mapFilterToApiValue,
   type CallTypeFilter,
 } from '@/features/filter-calls-by-type'
@@ -16,6 +15,7 @@ import {
   type CallsSortState,
   type SortByApiValue,
 } from '@/features/sort-calls'
+import { Chip } from '@/shared/ui'
 import { CallsTable } from '@/widgets/calls-table'
 import styles from './CallsPage.module.scss'
 
@@ -31,8 +31,13 @@ export const CallsPage = () => {
     sortBy: mapSortToApiValue(sort.sortBy),
     order: mapOrderToApiValue(sort),
   })
-  const { activeRecordId, loadingRecordId, handleToggleRecord, handleDownloadRecord } =
-    useCallAudio()
+  const {
+    activeRecordId,
+    loadingRecordId,
+    recordError,
+    handleToggleRecord,
+    handleDownloadRecord,
+  } = useCallAudio()
   const calls = data?.results ?? []
 
   const handleResetFilters = () => {
@@ -50,10 +55,7 @@ export const CallsPage = () => {
           <div className={styles.filterGroup}>
             <CallTypeSelect value={typeFilter} onChange={setTypeFilter} />
             {typeFilter !== 'all' ? (
-              <button className={styles.resetButton} type="button" onClick={handleResetFilters}>
-                {callTypeLabels[typeFilter]}
-                <span aria-hidden="true">×</span>
-              </button>
+              <Chip label="Сбросить фильтры" onDismiss={handleResetFilters} />
             ) : null}
           </div>
           <PeriodPicker value={period} onChange={setPeriod} />
@@ -72,6 +74,12 @@ export const CallsPage = () => {
 
         {!isLoading && !isError && calls.length === 0 ? (
           <div className={styles.state}>Нет звонков за выбранный период</div>
+        ) : null}
+
+        {recordError ? (
+          <div className={styles.state} role="alert">
+            {recordError}
+          </div>
         ) : null}
 
         {!isLoading && !isError && calls.length > 0 ? (

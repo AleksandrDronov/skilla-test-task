@@ -26,6 +26,7 @@
       "@/pages/calls": ["./src/pages/calls/index.ts"],
       "@/shared/config": ["./src/shared/config/index.ts"],
       "@/shared/lib": ["./src/shared/lib/index.ts"],
+      "@/shared/ui": ["./src/shared/ui/index.ts"],
       "@/*": ["./src/*"]
     }
   },

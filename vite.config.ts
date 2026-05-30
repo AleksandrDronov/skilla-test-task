@@ -15,6 +15,7 @@ const fsdPublicApi = {
   '@/pages/calls': path.join(src, 'pages/calls/index.ts'),
   '@/shared/config': path.join(src, 'shared/config/index.ts'),
   '@/shared/lib': path.join(src, 'shared/lib/index.ts'),
+  '@/shared/ui': path.join(src, 'shared/ui/index.ts'),
 }
 
 export default defineConfig({

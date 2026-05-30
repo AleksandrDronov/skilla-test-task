@@ -16,8 +16,20 @@ export const formatCallDuration = (seconds?: number | null) => {
   return formatRecordTime(seconds)
 }
 
+const normalizePhoneDigits = (digits: string) => {
+  if (digits.length === PHONE_DIGITS_COUNT && digits[0] === '8') {
+    return `7${digits.slice(1)}`
+  }
+
+  if (digits.length === PHONE_DIGITS_COUNT - 1) {
+    return `7${digits}`
+  }
+
+  return digits
+}
+
 export const formatPhoneNumber = (phone: string) => {
-  const digits = phone.replace(/\D/g, '')
+  const digits = normalizePhoneDigits(phone.replace(/\D/g, ''))
 
   if (digits.length !== PHONE_DIGITS_COUNT || digits[0] !== '7') {
     return phone

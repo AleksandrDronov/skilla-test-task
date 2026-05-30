@@ -3,12 +3,51 @@ import type { Call } from '@/entities/call'
 import { useLazyGetCallRecordQuery } from '@/entities/call'
 import { createAudioController } from '../model/audioController'
 
+const getRecordLoadError = (error: unknown) => {
+  if (error && typeof error === 'object' && 'error' in error) {
+    const message = (error as { error?: string }).error
+
+    if (typeof message === 'string' && message.trim()) {
+      return message
+    }
+  }
+
+  if (error instanceof Error && error.message.trim()) {
+    return error.message
+  }
+
+  return 'Не удалось загрузить запись звонка'
+}
+
 export const useCallAudio = () => {
   const [activeRecordId, setActiveRecordId] = useState<string | null>(null)
   const [loadingRecordId, setLoadingRecordId] = useState<string | null>(null)
+  const [recordError, setRecordError] = useState<string | null>(null)
   const audioUrlsRef = useRef(new Map<string, string>())
   const controller = useMemo(() => createAudioController(), [])
   const [getRecord] = useLazyGetCallRecordQuery()
+
+  const loadRecordUrl = async (call: Call) => {
+    if (!call.record || !call.partnership_id) {
+      throw new Error('У звонка нет данных для загрузки записи')
+    }
+
+    const cachedUrl = audioUrlsRef.current.get(call.record)
+
+    if (cachedUrl) {
+      return cachedUrl
+    }
+
+    const blob = await getRecord({
+      recordId: call.record,
+      partnershipId: call.partnership_id,
+    }).unwrap()
+
+    const url = URL.createObjectURL(blob)
+    audioUrlsRef.current.set(call.record, url)
+
+    return url
+  }
 
   const handleToggleRecord = async (call: Call) => {
     if (!call.record) {
@@ -21,24 +60,16 @@ export const useCallAudio = () => {
       return
     }
 
+    setRecordError(null)
     setLoadingRecordId(call.record)
 
     try {
-      let url = audioUrlsRef.current.get(call.record)
-
-      if (!url) {
-        const blob = await getRecord({
-          recordId: call.record,
-          partnershipId: call.partnership_id,
-        }).unwrap()
-
-        url = URL.createObjectURL(blob)
-        audioUrlsRef.current.set(call.record, url)
-      }
-
+      const url = await loadRecordUrl(call)
       const audio = new Audio(url)
       await controller.play(call.record, audio)
       setActiveRecordId(call.record)
+    } catch (error) {
+      setRecordError(getRecordLoadError(error))
     } finally {
       setLoadingRecordId(null)
     }
@@ -49,27 +80,23 @@ export const useCallAudio = () => {
       return
     }
 
-    let url = audioUrlsRef.current.get(call.record)
+    setRecordError(null)
 
-    if (!url) {
-      const blob = await getRecord({
-        recordId: call.record,
-        partnershipId: call.partnership_id,
-      }).unwrap()
-
-      url = URL.createObjectURL(blob)
-      audioUrlsRef.current.set(call.record, url)
+    try {
+      const url = await loadRecordUrl(call)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `call-${call.record}.mp3`
+      link.click()
+    } catch (error) {
+      setRecordError(getRecordLoadError(error))
     }
-
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `call-${call.record}.mp3`
-    link.click()
   }
 
   return {
     activeRecordId,
     loadingRecordId,
+    recordError,
     handleToggleRecord,
     handleDownloadRecord,
   }

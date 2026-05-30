@@ -1,0 +1,9 @@
+- main [ref=e3]:
+  - region "Список звонков" [ref=e4]:
+    - generic [ref=e5]:
+      - button "Все типы" [ref=e8] [cursor=pointer]: Все типы
+      - generic "Период звонков" [ref=e10]:
+        - button "Предыдущий период" [ref=e11] [cursor=pointer]
+        - 'button "Текущий период: 3 дня" [ref=e13] [cursor=pointer]': 3 дня
+        - button "Следующий период" [ref=e15] [cursor=pointer]
+    - generic [ref=e17]: Загрузка звонков...

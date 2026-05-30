@@ -60,8 +60,8 @@ export default [
                 'Импорт только через Public API: @/entities/call, @/features/sort-calls и т.д.',
             },
             {
-              regex: String.raw`^@/shared/(?!config$|lib$)`,
-              message: 'Импорт из shared только через @/shared/config или @/shared/lib.',
+              regex: String.raw`^@/shared/(?!config$|lib$|ui$)`,
+              message: 'Импорт из shared только через @/shared/config, @/shared/lib или @/shared/ui.',
             },
           ],
         },

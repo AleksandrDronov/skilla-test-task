@@ -1,7 +1,7 @@
 .root {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   border: 0;
   padding: 0;
   background: transparent;
@@ -27,39 +27,34 @@
 }
 
 .icon {
-  display: inline-flex;
+  display: block;
   flex-shrink: 0;
-  align-items: center;
-  gap: 2px;
-  width: 14px;
-  height: 10px;
+  position: relative;
+  width: 16px;
+  height: 16px;
 
-  &::before,
-  &::after {
+  &::before {
     content: '';
-    width: 5px;
-    height: 5px;
+    position: absolute;
+    top: 2px;
+    width: 6px;
+    height: 6px;
     border-right: 1.5px solid var(--color-icon);
     border-bottom: 1.5px solid var(--color-icon);
-  }
-
-  &::before {
-    transform: rotate(-135deg);
-  }
-
-  &::after {
     transform: rotate(45deg);
+    transition:
+      transform 0.25s ease,
+      border-color 0.2s ease;
   }
 }
 
-.iconAsc {
-  &::before {
-    border-color: var(--color-accent);
-  }
+.iconAsc::before {
+  transform: rotate(-135deg);
+  border-color: var(--color-accent);
+  top: 6px;
 }
 
-.iconDesc {
-  &::after {
-    border-color: var(--color-accent);
-  }
+.iconDesc::before {
+  transform: rotate(45deg);
+  border-color: var(--color-accent);
 }

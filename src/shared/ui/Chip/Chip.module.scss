@@ -1,0 +1,29 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.label {
+  display: inline;
+}
+
+.dismiss {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-icon);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
