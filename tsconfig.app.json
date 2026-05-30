@@ -16,7 +16,18 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals", "@testing-library/jest-dom"]
+    "paths": {
+      "@/entities/call": ["./src/entities/call/index.ts"],
+      "@/features/filter-calls-by-type": ["./src/features/filter-calls-by-type/index.ts"],
+      "@/features/filter-calls-by-period": ["./src/features/filter-calls-by-period/index.ts"],
+      "@/features/sort-calls": ["./src/features/sort-calls/index.ts"],
+      "@/features/play-call-record": ["./src/features/play-call-record/index.ts"],
+      "@/widgets/calls-table": ["./src/widgets/calls-table/index.ts"],
+      "@/pages/calls": ["./src/pages/calls/index.ts"],
+      "@/shared/config": ["./src/shared/config/index.ts"],
+      "@/shared/lib": ["./src/shared/lib/index.ts"],
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"]
 }

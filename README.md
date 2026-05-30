@@ -33,10 +33,10 @@
 cp .env.example .env
 ```
 
-| Переменная | Описание |
-|------------|----------|
-| `VITE_API_BASE_URL` | Базовый URL API (`https://api.skilla.ru`) |
-| `VITE_API_TOKEN` | Токен для заголовка `Authorization: Bearer …` |
+| Переменная             | Описание                                           |
+| ---------------------- | -------------------------------------------------- |
+| `VITE_API_BASE_URL`    | Базовый URL API (`https://api.skilla.ru`)          |
+| `VITE_API_TOKEN`       | Токен для заголовка `Authorization: Bearer …`      |
 | `VITE_API_CALLS_LIMIT` | Лимит записей в запросе списка (по умолчанию `50`) |
 
 ## Запуск
