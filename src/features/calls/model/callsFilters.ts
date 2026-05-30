@@ -1,6 +1,19 @@
 import dayjs from 'dayjs'
 
 export type CallTypeFilter = 'all' | 'incoming' | 'outgoing'
+export type SortByFilter = 'none' | 'date' | 'duration'
+export type SortByApiValue = 'date' | 'duration'
+export type SortOrder = 'ASC' | 'DESC'
+
+export type CallsSortState = {
+  sortBy: SortByFilter
+  order: SortOrder
+}
+
+export const defaultCallsSort: CallsSortState = {
+  sortBy: 'none',
+  order: 'DESC',
+}
 export type PeriodPreset = 'threeDays' | 'week' | 'month' | 'year'
 
 export type DateRange = {
@@ -33,6 +46,38 @@ export const mapFilterToApiValue = (filter: CallTypeFilter) => {
   }
 
   return undefined
+}
+
+export const mapSortToApiValue = (sort: SortByFilter): SortByApiValue | undefined => {
+  if (sort === 'date' || sort === 'duration') {
+    return sort
+  }
+
+  return undefined
+}
+
+export const mapOrderToApiValue = (sort: CallsSortState): SortOrder | undefined => {
+  if (mapSortToApiValue(sort.sortBy) === undefined) {
+    return undefined
+  }
+
+  return sort.order
+}
+
+export const getNextSortState = (
+  current: CallsSortState,
+  column: SortByApiValue,
+  defaultOrder: SortOrder = 'DESC',
+): CallsSortState => {
+  if (current.sortBy !== column) {
+    return { sortBy: column, order: defaultOrder }
+  }
+
+  if (current.order === 'DESC') {
+    return { sortBy: column, order: 'ASC' }
+  }
+
+  return { sortBy: 'none', order: defaultOrder }
 }
 
 export const getDateRange = (preset: PeriodPreset): DateRange => {

@@ -1,12 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { Call, CallsResponse } from '../../features/calls/types/call'
-import type { CallTypeFilter, PeriodPreset } from '../../features/calls/model/callsFilters'
-import { getDateRange, mapFilterToApiValue } from '../../features/calls/model/callsFilters'
+import type { CallTypeFilter, CallsSortState, PeriodPreset } from '../../features/calls/model/callsFilters'
+import {
+  getDateRange,
+  mapFilterToApiValue,
+  mapOrderToApiValue,
+  mapSortToApiValue,
+} from '../../features/calls/model/callsFilters'
 import { env } from '../../shared/config/env'
 
 type GetCallsParams = {
   typeFilter: CallTypeFilter
   period: PeriodPreset
+  sort: CallsSortState
 }
 
 type GetRecordParams = {
@@ -42,9 +48,11 @@ export const callsApi = createApi({
   }),
   endpoints: (builder) => ({
     getCalls: builder.query<CallsResponse, GetCallsParams>({
-      query: ({ typeFilter, period }) => {
-        const dateRange = getDateRange(period)
+      query: ({ typeFilter, period, sort }) => {
         const inOut = mapFilterToApiValue(typeFilter)
+        const sortByApi = mapSortToApiValue(sort.sortBy)
+        const orderApi = mapOrderToApiValue(sort)
+        const dateRange = getDateRange(period)
 
         return {
           url: '/mango/getList',
@@ -54,6 +62,8 @@ export const callsApi = createApi({
             date_end: dateRange.dateEnd,
             limit: env.apiCallsLimit,
             ...(inOut === undefined ? {} : { in_out: inOut }),
+            ...(sortByApi === undefined ? {} : { sort_by: sortByApi }),
+            ...(orderApi === undefined ? {} : { order: orderApi }),
           },
         }
       },

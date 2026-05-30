@@ -2,21 +2,26 @@ import { useState } from 'react'
 import { useCallAudio } from '../../features/calls/hooks/useCallAudio'
 import { CallTypeSelect } from '../../features/calls/components/CallTypeSelect'
 import { PeriodPicker } from '../../features/calls/components/PeriodPicker'
-import type { CallTypeFilter, PeriodPreset } from '../../features/calls/model/callsFilters'
-import { callTypeLabels } from '../../features/calls/model/callsFilters'
+import type { CallTypeFilter, PeriodPreset, SortByApiValue } from '../../features/calls/model/callsFilters'
+import { callTypeLabels, defaultCallsSort, getNextSortState } from '../../features/calls/model/callsFilters'
 import { useGetCallsQuery } from '../../services/callsApi/callsApi'
 import { CallsTable } from '../../widgets/CallsTable/CallsTable'
 import styles from './CallsPage.module.scss'
 
 export const CallsPage = () => {
   const [typeFilter, setTypeFilter] = useState<CallTypeFilter>('all')
+  const [sort, setSort] = useState(defaultCallsSort)
   const [period, setPeriod] = useState<PeriodPreset>('threeDays')
+  const { data, isLoading, isError, refetch } = useGetCallsQuery({ typeFilter, period, sort })
   const { activeRecordId, loadingRecordId, handleToggleRecord, handleDownloadRecord } = useCallAudio()
-  const { data, isLoading, isError, refetch } = useGetCallsQuery({ typeFilter, period })
   const calls = data?.results ?? []
 
   const handleResetFilters = () => {
     setTypeFilter('all')
+  }
+
+  const handleColumnSort = (column: SortByApiValue) => {
+    setSort((current) => getNextSortState(current, column))
   }
 
   return (
@@ -53,6 +58,8 @@ export const CallsPage = () => {
         {!isLoading && !isError && calls.length > 0 ? (
           <CallsTable
             calls={calls}
+            sort={sort}
+            onColumnSort={handleColumnSort}
             activeRecordId={activeRecordId}
             loadingRecordId={loadingRecordId}
             onToggleRecord={handleToggleRecord}
