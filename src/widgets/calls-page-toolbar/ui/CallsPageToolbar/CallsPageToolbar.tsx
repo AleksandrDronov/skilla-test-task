@@ -4,7 +4,7 @@ import { PeriodPicker, type PeriodPreset } from '@/features/filter-calls-by-peri
 import { Chip } from '@/shared/ui'
 import styles from './CallsPageToolbar.module.scss'
 
-interface CallsPageToolbarProps {
+export interface CallsPageToolbarProps {
   typeFilter: CallTypeFilter
   onTypeFilterChange: (value: CallTypeFilter) => void
   period: PeriodPreset

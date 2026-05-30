@@ -3,41 +3,51 @@ import type { Call } from '@/entities/call'
 import { CallsTable } from '@/features/calls-table'
 import { CallsPagination, type PaginationMeta } from '@/features/paginate-calls'
 import { AudioPlayerPreview } from '@/features/play-call-record'
-import { SortableColumnHeader, type CallsSortState, type SortByApiValue } from '@/features/sort-calls'
-import styles from './CallsPageTable.module.scss'
+import {
+  SortableColumnHeader,
+  type CallsSortState,
+  type SortByApiValue,
+} from '@/features/sort-calls'
+import { CallsTableStatus } from '../CallsTableStatus/CallsTableStatus'
 
-interface CallsPageTableProps {
+export interface CallsQueryProps {
   calls: Call[]
   isLoading: boolean
   isError: boolean
   onRetry: () => void
+}
+
+export interface CallsSortProps {
   sort: CallsSortState
   onColumnSort: (column: SortByApiValue) => void
+}
+
+export interface CallsRecordProps {
   activeRecordId: string | null
   loadingRecordId: string | null
   recordError: string | null
   onToggleRecord: (call: Call) => void
   onDownloadRecord: (call: Call) => void
+}
+
+export interface CallsPaginationProps {
   pagination?: PaginationMeta
-  onPaginationPrevious?: () => void
-  onPaginationNext?: () => void
+  onPrevious?: () => void
+  onNext?: () => void
+}
+
+export interface CallsPageTableProps {
+  query: CallsQueryProps
+  sort: CallsSortProps
+  record: CallsRecordProps
+  pagination: CallsPaginationProps
 }
 
 const CallsPageTableComponent = ({
-  calls,
-  isLoading,
-  isError,
-  onRetry,
-  sort,
-  onColumnSort,
-  activeRecordId,
-  loadingRecordId,
-  recordError,
-  onToggleRecord,
-  onDownloadRecord,
-  pagination,
-  onPaginationPrevious,
-  onPaginationNext,
+  query: { calls, isLoading, isError, onRetry },
+  sort: { sort, onColumnSort },
+  record: { activeRecordId, loadingRecordId, recordError, onToggleRecord, onDownloadRecord },
+  pagination: { pagination, onPrevious, onNext },
 }: CallsPageTableProps) => {
   const renderRecordPlayer = useCallback(
     (call: Call) => (
@@ -53,38 +63,23 @@ const CallsPageTableComponent = ({
   )
 
   const tableFooter =
-    pagination && onPaginationPrevious && onPaginationNext ? (
-      <CallsPagination
-        meta={pagination}
-        onPrevious={onPaginationPrevious}
-        onNext={onPaginationNext}
-      />
+    pagination && onPrevious && onNext ? (
+      <CallsPagination meta={pagination} onPrevious={onPrevious} onNext={onNext} />
     ) : null
+
+  const hasData = !isLoading && !isError && calls.length > 0
 
   return (
     <>
-      {isLoading ? <div className={styles.state}>Загрузка звонков...</div> : null}
+      <CallsTableStatus
+        isLoading={isLoading}
+        isError={isError}
+        isEmpty={!isLoading && !isError && calls.length === 0}
+        recordError={recordError}
+        onRetry={onRetry}
+      />
 
-      {isError ? (
-        <div className={styles.state}>
-          <p>Не удалось загрузить список звонков</p>
-          <button className={styles.retryButton} type="button" onClick={onRetry}>
-            Повторить
-          </button>
-        </div>
-      ) : null}
-
-      {!isLoading && !isError && calls.length === 0 ? (
-        <div className={styles.state}>Нет звонков за выбранный период</div>
-      ) : null}
-
-      {recordError ? (
-        <div className={styles.state} role="alert">
-          {recordError}
-        </div>
-      ) : null}
-
-      {!isLoading && !isError && calls.length > 0 ? (
+      {hasData ? (
         <CallsTable
           calls={calls}
           timeColumnHeader={
