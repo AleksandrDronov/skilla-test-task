@@ -1,0 +1,40 @@
+import { type DateRange } from '@/features/filter-calls-by-period'
+import { mapFilterToApiValue, type CallTypeFilter } from '@/features/filter-calls-by-type'
+import { type SortByApiValue, type SortOrder } from '@/features/sort-calls'
+import { type GetCallsQueryParams, useGetCallsQuery } from '@/entities/call'
+
+interface UseCallsDataParams {
+  typeFilter: CallTypeFilter
+  dateRange: DateRange
+  offset: number
+  sortByApiValue?: SortByApiValue
+  orderApiValue?: SortOrder
+}
+
+export const useCallsData = ({
+  typeFilter,
+  dateRange,
+  offset,
+  sortByApiValue,
+  orderApiValue,
+}: UseCallsDataParams) => {
+  const queryArgs: GetCallsQueryParams = {
+    inOut: mapFilterToApiValue(typeFilter),
+    dateStart: dateRange.dateStart,
+    dateEnd: dateRange.dateEnd,
+    offset,
+    sortBy: sortByApiValue,
+    order: orderApiValue,
+  }
+
+  const { data, isLoading, isError, refetch } = useGetCallsQuery(queryArgs)
+  const calls = data?.results ?? []
+
+  return {
+    calls,
+    totalRowsRaw: data?.total_rows,
+    isLoading,
+    isError,
+    refetch,
+  }
+}

@@ -12,6 +12,7 @@ type DropdownMenuContextValue = {
   value: unknown
   isOpen: boolean
   rootRef: RefObject<HTMLDivElement | null>
+  triggerRef: RefObject<HTMLButtonElement | null>
   handleToggle: () => void
   handleSelect: (value: unknown) => void
 }
@@ -47,7 +48,7 @@ const DropdownMenuRoot = <T,>({
   className,
   ariaLabel,
 }: DropdownMenuProps<T>) => {
-  const { isOpen, rootRef, handleToggle, handleSelect } = useDropdownMenu(onChange)
+  const { isOpen, rootRef, triggerRef, handleToggle, handleSelect } = useDropdownMenu(onChange)
 
   return (
     <DropdownMenuContext.Provider
@@ -55,6 +56,7 @@ const DropdownMenuRoot = <T,>({
         value,
         isOpen,
         rootRef,
+        triggerRef,
         handleToggle,
         handleSelect: (nextValue) => handleSelect(nextValue as T),
       }}
@@ -73,10 +75,11 @@ interface DropdownMenuTriggerProps {
 }
 
 const DropdownMenuTrigger = ({ children, className, ariaLabel }: DropdownMenuTriggerProps) => {
-  const { isOpen, handleToggle } = useDropdownMenuContext()
+  const { isOpen, triggerRef, handleToggle } = useDropdownMenuContext()
 
   return (
     <button
+      ref={triggerRef}
       type="button"
       className={className}
       aria-label={ariaLabel}

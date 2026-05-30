@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Call } from '@/entities/call'
 import { useLazyGetCallRecordQuery } from '@/entities/call'
 import { createAudioController } from '../model/audioController'
@@ -23,75 +23,91 @@ export const useCallAudio = () => {
   const [activeRecordId, setActiveRecordId] = useState<string | null>(null)
   const [loadingRecordId, setLoadingRecordId] = useState<string | null>(null)
   const [recordError, setRecordError] = useState<string | null>(null)
+  const activeRecordIdRef = useRef<string | null>(null)
   const audioUrlsRef = useRef(new Map<string, string>())
   const controller = useMemo(() => createAudioController(), [])
   const [getRecord] = useLazyGetCallRecordQuery()
 
-  const loadRecordUrl = async (call: Call) => {
-    if (!call.record || !call.partnership_id) {
-      throw new Error('У звонка нет данных для загрузки записи')
-    }
+  useEffect(() => {
+    activeRecordIdRef.current = activeRecordId
+  }, [activeRecordId])
 
-    const cachedUrl = audioUrlsRef.current.get(call.record)
+  const loadRecordUrl = useCallback(
+    async (call: Call) => {
+      if (!call.record || !call.partnership_id) {
+        throw new Error('У звонка нет данных для загрузки записи')
+      }
 
-    if (cachedUrl) {
-      return cachedUrl
-    }
+      const cachedUrl = audioUrlsRef.current.get(call.record)
 
-    const blob = await getRecord({
-      recordId: call.record,
-      partnershipId: call.partnership_id,
-    }).unwrap()
+      if (cachedUrl) {
+        return cachedUrl
+      }
 
-    const url = URL.createObjectURL(blob)
-    audioUrlsRef.current.set(call.record, url)
+      const blob = await getRecord({
+        recordId: call.record,
+        partnershipId: call.partnership_id,
+      }).unwrap()
 
-    return url
-  }
+      const url = URL.createObjectURL(blob)
+      audioUrlsRef.current.set(call.record, url)
 
-  const handleToggleRecord = async (call: Call) => {
-    if (!call.record) {
-      return
-    }
+      return url
+    },
+    [getRecord],
+  )
 
-    if (activeRecordId === call.record) {
-      controller.stop()
-      setActiveRecordId(null)
-      return
-    }
+  const handleToggleRecord = useCallback(
+    async (call: Call) => {
+      if (!call.record) {
+        return
+      }
 
-    setRecordError(null)
-    setLoadingRecordId(call.record)
+      if (activeRecordIdRef.current === call.record) {
+        controller.stop()
+        activeRecordIdRef.current = null
+        setActiveRecordId(null)
+        return
+      }
 
-    try {
-      const url = await loadRecordUrl(call)
-      const audio = new Audio(url)
-      await controller.play(call.record, audio)
-      setActiveRecordId(call.record)
-    } catch (error) {
-      setRecordError(getRecordLoadError(error))
-    } finally {
-      setLoadingRecordId(null)
-    }
-  }
+      setRecordError(null)
+      setLoadingRecordId(call.record)
 
-  const handleDownloadRecord = async (call: Call) => {
-    if (!call.record) {
-      return
-    }
+      try {
+        const url = await loadRecordUrl(call)
+        const audio = new Audio(url)
+        await controller.play(call.record, audio)
+        activeRecordIdRef.current = call.record
+        setActiveRecordId(call.record)
+      } catch (error) {
+        setRecordError(getRecordLoadError(error))
+      } finally {
+        setLoadingRecordId(null)
+      }
+    },
+    [controller, loadRecordUrl],
+  )
 
-    setRecordError(null)
+  const handleDownloadRecord = useCallback(
+    async (call: Call) => {
+      if (!call.record) {
+        return
+      }
 
-    try {
-      const url = await loadRecordUrl(call)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `call-${call.record}.mp3`
-      link.click()
-    } catch (error) {
-      setRecordError(getRecordLoadError(error))
-    }
-  }
+      setRecordError(null)
+
+      try {
+        const url = await loadRecordUrl(call)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `call-${call.record}.mp3`
+        link.click()
+      } catch (error) {
+        setRecordError(getRecordLoadError(error))
+      }
+    },
+    [loadRecordUrl],
+  )
 
   return {
     activeRecordId,

@@ -38,18 +38,15 @@ const IncomingArrow = () => (
     aria-hidden
   >
     <path
-      d="M12.5 3.5L3.5 12.5M3.5 12.5H7.5M3.5 12.5V8.5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      d="M12.5217 1.17704L11.3447 0L1.66957 9.67513V4.17391H0V12.5217H8.34783V10.8522H2.84661L12.5217 1.17704Z"
+      fill="currentColor"
     />
   </svg>
 )
 
 const OutgoingArrow = () => (
   <svg
-    className={styles.arrow}
+    className={clsx(styles.arrow, styles.arrowOutgoing)}
     width="16"
     height="16"
     viewBox="0 0 16 16"
@@ -58,11 +55,8 @@ const OutgoingArrow = () => (
     aria-hidden
   >
     <path
-      d="M3.5 12.5L12.5 3.5M12.5 3.5H8.5M12.5 3.5V7.5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      d="M12.5217 1.17704L11.3447 0L1.66957 9.67513V4.17391H0V12.5217H8.34783V10.8522H2.84661L12.5217 1.17704Z"
+      fill="currentColor"
     />
   </svg>
 )

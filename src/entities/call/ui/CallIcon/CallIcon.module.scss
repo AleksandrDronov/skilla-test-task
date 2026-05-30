@@ -11,6 +11,10 @@
   flex-shrink: 0;
 }
 
+.arrowOutgoing {
+  transform: rotate(180deg);
+}
+
 .incoming {
   color: var(--color-accent);
 }

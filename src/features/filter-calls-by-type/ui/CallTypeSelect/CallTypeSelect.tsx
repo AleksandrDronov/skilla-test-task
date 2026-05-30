@@ -15,7 +15,9 @@ const CallTypeSelectTrigger = ({ value }: { value: CallTypeFilter }) => {
   const { isOpen } = useDropdownMenuContext<CallTypeFilter>()
 
   return (
-    <DropdownMenu.Trigger className={styles.trigger}>
+    <DropdownMenu.Trigger
+      className={clsx(styles.trigger, value === 'all' && styles.triggerDefault)}
+    >
       {callTypeLabels[value]}
       <span className={clsx(styles.arrow, isOpen && styles.arrowOpen)} aria-hidden />
     </DropdownMenu.Trigger>

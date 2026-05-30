@@ -5,9 +5,13 @@
   border: 0;
   padding: 0;
   background: transparent;
-  color: var(--color-text-secondary);
+  color: var(--color-accent);
   font-size: 14px;
   line-height: 21px;
+}
+
+.triggerDefault {
+  color: var(--color-text-secondary);
 }
 
 .arrow {

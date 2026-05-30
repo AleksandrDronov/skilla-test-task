@@ -6,6 +6,7 @@ export interface GetCallsQueryParams {
   inOut?: 0 | 1
   dateStart: string
   dateEnd: string
+  offset?: number
   sortBy?: CallListSortField
   order?: CallListSortOrder
 }
@@ -83,13 +84,14 @@ export const callsApi = createApi({
   }),
   endpoints: (builder) => ({
     getCalls: builder.query<CallsResponse, GetCallsQueryParams>({
-      query: ({ inOut, dateStart, dateEnd, sortBy, order }) => ({
+      query: ({ inOut, dateStart, dateEnd, offset, sortBy, order }) => ({
         url: '/mango/getList',
         method: 'POST',
         params: {
           date_start: dateStart,
           date_end: dateEnd,
           limit: env.apiCallsLimit,
+          ...(offset === undefined || offset <= 0 ? {} : { offset }),
           ...(inOut === undefined ? {} : { in_out: inOut }),
           ...(sortBy === undefined ? {} : { sort_by: sortBy }),
           ...(order === undefined ? {} : { order }),

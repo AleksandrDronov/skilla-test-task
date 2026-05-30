@@ -1,0 +1,14 @@
+.toolbar {
+  display: flex;
+  width: 1440px;
+  height: 24px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}

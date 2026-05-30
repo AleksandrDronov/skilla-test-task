@@ -1,14 +1,11 @@
-import { AudioPlayerPreview } from '@/features/play-call-record'
+import { memo, type ReactNode } from 'react'
 import { CallIcon, EmployeeAvatar, type Call } from '@/entities/call'
 import { formatCallDuration, formatCallTime, formatPhoneNumber } from '@/shared/lib'
 import styles from './CallRow.module.scss'
 
 interface CallRowProps {
   call: Call
-  activeRecordId: string | null
-  loadingRecordId: string | null
-  onToggleRecord: (call: Call) => void
-  onDownloadRecord: (call: Call) => void
+  recordPlayer?: ReactNode
 }
 
 const getCallContact = (call: Call) => {
@@ -19,16 +16,9 @@ const getCallContact = (call: Call) => {
   return formatPhoneNumber(call.in_out === 1 ? (call.from_number ?? '') : (call.to_number ?? ''))
 }
 
-export const CallRow = ({
-  call,
-  activeRecordId,
-  loadingRecordId,
-  onToggleRecord,
-  onDownloadRecord,
-}: CallRowProps) => {
+const CallRowComponent = ({ call, recordPlayer }: CallRowProps) => {
   const contact = getCallContact(call)
   const company = call.contact_company
-  const hasRecord = Boolean(call.record)
 
   return (
     <tr className={styles.row}>
@@ -47,18 +37,10 @@ export const CallRow = ({
       <td className={styles.gradeCell} aria-label="Оценка" />
       <td className={styles.durationCell}>
         <span className={styles.duration}>{formatCallDuration(call.time)}</span>
-        {hasRecord ? (
-          <div className={styles.player}>
-            <AudioPlayerPreview
-              call={call}
-              isActive={activeRecordId === call.record}
-              isLoading={loadingRecordId === call.record}
-              onToggle={onToggleRecord}
-              onDownload={onDownloadRecord}
-            />
-          </div>
-        ) : null}
+        {recordPlayer ? <div className={styles.player}>{recordPlayer}</div> : null}
       </td>
     </tr>
   )
 }
+
+export const CallRow = memo(CallRowComponent)
