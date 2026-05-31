@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useDismissOnClickOutside } from './useDismissOnClickOutside'
 
 /**
@@ -13,14 +13,14 @@ export const useDropdownMenu = <T>(onChange: (value: T) => void) => {
   const rootRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
-  const focusTrigger = () => {
+  const focusTrigger = useCallback(() => {
     triggerRef.current?.focus()
-  }
+  }, [])
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     focusTrigger()
     setIsOpen(false)
-  }
+  }, [focusTrigger])
 
   useDismissOnClickOutside({
     isOpen,
@@ -28,7 +28,7 @@ export const useDropdownMenu = <T>(onChange: (value: T) => void) => {
     containerRef: rootRef,
   })
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setIsOpen((current) => {
       if (current) {
         focusTrigger()
@@ -36,12 +36,15 @@ export const useDropdownMenu = <T>(onChange: (value: T) => void) => {
 
       return !current
     })
-  }
+  }, [focusTrigger])
 
-  const handleSelect = (value: T) => {
-    onChange(value)
-    handleClose()
-  }
+  const handleSelect = useCallback(
+    (nextValue: T) => {
+      onChange(nextValue)
+      handleClose()
+    },
+    [handleClose, onChange],
+  )
 
   return {
     isOpen,

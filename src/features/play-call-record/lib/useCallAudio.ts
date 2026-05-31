@@ -38,6 +38,15 @@ export const useCallAudio = () => {
     activeRecordIdRef.current = activeRecordId
   }, [activeRecordId])
 
+  useEffect(
+    () => () => {
+      controller.stop()
+      audioUrlsRef.current.forEach((url) => URL.revokeObjectURL(url))
+      audioUrlsRef.current.clear()
+    },
+    [controller],
+  )
+
   const loadRecordUrl = useCallback(
     async (call: Call) => {
       if (!call.record || !call.partnership_id) {

@@ -1,1 +1,2 @@
-export { DropdownMenu, useDropdownMenuContext } from './DropdownMenu'
+export { DropdownMenu } from './DropdownMenu'
+export { useDropdownMenuContext } from './DropdownMenuContext'

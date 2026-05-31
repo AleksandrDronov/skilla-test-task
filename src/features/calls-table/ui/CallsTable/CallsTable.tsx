@@ -36,9 +36,7 @@ const CallsTableComponent = ({
           <CallRow
             key={call.id}
             call={call}
-            recordPlayer={
-              call.record && renderRecordPlayer ? renderRecordPlayer(call) : undefined
-            }
+            recordPlayer={call.record && renderRecordPlayer ? renderRecordPlayer(call) : undefined}
           />
         ))}
       </tbody>

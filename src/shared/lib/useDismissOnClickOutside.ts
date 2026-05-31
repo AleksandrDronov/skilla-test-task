@@ -19,10 +19,13 @@ export const useDismissOnClickOutside = ({
   containerRef,
 }: UseDismissOnClickOutsideParams) => {
   const onCloseRef = useRef(onClose)
-  onCloseRef.current = onClose
 
   useEffect(() => {
-    if (!isOpen) return
+    onCloseRef.current = onClose
+  }, [onClose])
+
+  useEffect(() => {
+    if (!isOpen) return undefined
 
     const handlePointerDown = (event: MouseEvent) => {
       if (containerRef.current?.contains(event.target as Node)) return

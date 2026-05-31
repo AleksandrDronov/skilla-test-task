@@ -1,44 +1,12 @@
-import {
-  createContext,
-  useContext,
-  type ReactNode,
-  type RefObject,
-} from 'react'
+import { useCallback, useMemo, type ReactNode } from 'react'
 import clsx from 'clsx'
 import { useDropdownMenu } from '@/shared/lib'
+import {
+  DropdownMenuContext,
+  useDropdownMenuContext,
+  type DropdownMenuContextValue,
+} from './DropdownMenuContext'
 import styles from './DropdownMenu.module.scss'
-
-type DropdownMenuContextValue = {
-  value: unknown
-  isOpen: boolean
-  rootRef: RefObject<HTMLDivElement | null>
-  triggerRef: RefObject<HTMLButtonElement | null>
-  handleToggle: () => void
-  handleSelect: (value: unknown) => void
-}
-
-const DropdownMenuContext = createContext<DropdownMenuContextValue | null>(null)
-
-/**
- * Доступ к состоянию compound-компонента `DropdownMenu` из `Trigger` и `Panel`.
- *
- * @template T — тип значения выбранной опции.
- * @returns Контекст меню с типизированными `value` и `handleSelect`.
- * @throws Если хук вызван вне `<DropdownMenu>`.
- */
-export const useDropdownMenuContext = <T,>() => {
-  const context = useContext(DropdownMenuContext)
-
-  if (!context) {
-    throw new Error('DropdownMenu components must be used within DropdownMenu')
-  }
-
-  return {
-    ...context,
-    value: context.value as T,
-    handleSelect: context.handleSelect as (value: T) => void,
-  }
-}
 
 interface DropdownMenuProps<T> {
   value: T
@@ -56,18 +24,24 @@ const DropdownMenuRoot = <T,>({
   ariaLabel,
 }: DropdownMenuProps<T>) => {
   const { isOpen, rootRef, triggerRef, handleToggle, handleSelect } = useDropdownMenu(onChange)
+  const handleContextSelect = useCallback(
+    (nextValue: unknown) => handleSelect(nextValue as T),
+    [handleSelect],
+  )
+  const contextValue = useMemo<DropdownMenuContextValue>(
+    () => ({
+      value,
+      isOpen,
+      rootRef,
+      triggerRef,
+      handleToggle,
+      handleSelect: handleContextSelect,
+    }),
+    [handleContextSelect, handleToggle, isOpen, rootRef, triggerRef, value],
+  )
 
   return (
-    <DropdownMenuContext.Provider
-      value={{
-        value,
-        isOpen,
-        rootRef,
-        triggerRef,
-        handleToggle,
-        handleSelect: (nextValue) => handleSelect(nextValue as T),
-      }}
-    >
+    <DropdownMenuContext.Provider value={contextValue}>
       <div className={clsx(styles.root, className)} ref={rootRef} aria-label={ariaLabel}>
         {children}
       </div>
