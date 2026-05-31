@@ -61,7 +61,8 @@ export default [
             },
             {
               regex: String.raw`^@/shared/(?!config$|lib$|ui$)`,
-              message: 'Импорт из shared только через @/shared/config, @/shared/lib или @/shared/ui.',
+              message:
+                'Импорт из shared только через @/shared/config, @/shared/lib или @/shared/ui.',
             },
           ],
         },
