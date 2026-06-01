@@ -1,54 +1,19 @@
 import { memo, useCallback } from 'react'
 import type { Call } from '@/entities/call'
 import { CallsTable } from '@/features/calls-table'
-import { CallsPagination, type PaginationMeta } from '@/features/paginate-calls'
+import { CallsPagination } from '@/features/paginate-calls'
 import { AudioPlayerPreview } from '@/features/play-call-record'
-import {
-  SortableColumnHeader,
-  type CallsSortState,
-  type SortByApiValue,
-} from '@/features/sort-calls'
+import { SortableColumnHeader } from '@/features/sort-calls'
+import { useCallsPageTable } from '../../lib/useCallsPageTable'
+import type { CallsPageTableProps, CallsPageTableViewProps } from '../../model/types'
 import { CallsTableStatus } from '../CallsTableStatus/CallsTableStatus'
 
-export interface CallsQueryProps {
-  calls: Call[]
-  isLoading: boolean
-  isError: boolean
-  onRetry: () => void
-}
-
-export interface CallsSortProps {
-  sort: CallsSortState
-  onColumnSort: (column: SortByApiValue) => void
-}
-
-export interface CallsRecordProps {
-  activeRecordId: string | null
-  loadingRecordId: string | null
-  recordError: string | null
-  onToggleRecord: (call: Call) => void
-  onDownloadRecord: (call: Call) => void
-}
-
-export interface CallsPaginationProps {
-  pagination?: PaginationMeta
-  onPrevious?: () => void
-  onNext?: () => void
-}
-
-export interface CallsPageTableProps {
-  query: CallsQueryProps
-  sort: CallsSortProps
-  record: CallsRecordProps
-  pagination: CallsPaginationProps
-}
-
-const CallsPageTableComponent = ({
+const CallsPageTableView = ({
   query: { calls, isLoading, isError, onRetry },
   sort: { sort, onColumnSort },
   record: { activeRecordId, loadingRecordId, recordError, onToggleRecord, onDownloadRecord },
   pagination: { pagination, onPrevious, onNext },
-}: CallsPageTableProps) => {
+}: CallsPageTableViewProps) => {
   const renderRecordPlayer = useCallback(
     (call: Call) => (
       <AudioPlayerPreview
@@ -105,6 +70,12 @@ const CallsPageTableComponent = ({
       ) : null}
     </>
   )
+}
+
+const CallsPageTableComponent = ({ filters }: CallsPageTableProps) => {
+  const table = useCallsPageTable(filters)
+
+  return <CallsPageTableView {...table} />
 }
 
 export const CallsPageTable = memo(CallsPageTableComponent)

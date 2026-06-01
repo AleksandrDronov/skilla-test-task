@@ -1,16 +1,16 @@
 import { CallsPageTable } from '@/widgets/calls-page-table'
 import { CallsPageToolbar } from '@/widgets/calls-page-toolbar'
-import { useCallsPage } from '../../lib/useCallsPage'
+import { useCallsPageToolbar } from '../../lib/useCallsPageToolbar'
 import styles from './CallsPage.module.scss'
 
 export const CallsPage = () => {
-  const { toolbar, table } = useCallsPage()
+  const { filters, toolbar } = useCallsPageToolbar()
 
   return (
     <main className={styles.page}>
       <section className={styles.content} aria-label="Список звонков">
         <CallsPageToolbar {...toolbar} />
-        <CallsPageTable {...table} />
+        <CallsPageTable filters={filters} />
       </section>
     </main>
   )

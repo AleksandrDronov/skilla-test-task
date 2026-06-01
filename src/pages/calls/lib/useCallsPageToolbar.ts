@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { type DateRange, type PeriodPreset } from '@/features/filter-calls-by-period'
 import { type CallTypeFilter } from '@/features/filter-calls-by-type'
 import { type CallsPageToolbarProps } from '@/widgets/calls-page-toolbar'
@@ -19,11 +20,14 @@ export const useCallsPageToolbar = (): UseCallsPageToolbarResult => {
   const { typeFilter, setTypeFilter, period, setPeriod, dateRange, handleResetFilters } =
     useCallsFilters()
 
-  const filters = {
-    typeFilter,
-    period,
-    dateRange,
-  }
+  const filters = useMemo(
+    () => ({
+      typeFilter,
+      period,
+      dateRange,
+    }),
+    [typeFilter, period, dateRange],
+  )
 
   const toolbar = {
     typeFilter,

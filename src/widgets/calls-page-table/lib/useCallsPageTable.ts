@@ -1,25 +1,17 @@
 import { useMemo } from 'react'
-import { type DateRange, type PeriodPreset } from '@/features/filter-calls-by-period'
-import { type CallTypeFilter } from '@/features/filter-calls-by-type'
 import { useCallsPagination } from '@/features/paginate-calls'
 import { useCallAudio } from '@/features/play-call-record'
-import { type CallsPageTableProps } from '@/widgets/calls-page-table'
+import type { CallsPageTableFilters, CallsPageTableViewProps } from '../model/types'
 import { useCallsData } from './useCallsData'
 import { useCallsSorting } from './useCallsSorting'
 import { useResettableCallsPage } from './useResettableCallsPage'
 
-interface UseCallsPageTableParams {
-  typeFilter: CallTypeFilter
-  period: PeriodPreset
-  dateRange: DateRange
-}
-
-/** Собирает состояние таблицы звонков и адаптирует его к пропсам табличного виджета. */
+/** Собирает состояние таблицы звонков и адаптирует его к пропсам табличного UI. */
 export const useCallsPageTable = ({
   typeFilter,
   period,
   dateRange,
-}: UseCallsPageTableParams): CallsPageTableProps => {
+}: CallsPageTableFilters): CallsPageTableViewProps => {
   const { sort, sortByApiValue, orderApiValue, handleColumnSort } = useCallsSorting()
   const resetPageKey = `${typeFilter}-${sort.sortBy}-${sort.order}-${period}`
   const { page, offset, setPage } = useResettableCallsPage(resetPageKey)
@@ -39,15 +31,15 @@ export const useCallsPageTable = ({
     currentResultsCount: calls.length,
   })
 
-  const query = useMemo<CallsPageTableProps['query']>(
+  const query = useMemo<CallsPageTableViewProps['query']>(
     () => ({ calls, isLoading, isError, onRetry: refetch }),
     [calls, isLoading, isError, refetch],
   )
-  const sortProps = useMemo<CallsPageTableProps['sort']>(
+  const sortProps = useMemo<CallsPageTableViewProps['sort']>(
     () => ({ sort, onColumnSort: handleColumnSort }),
     [sort, handleColumnSort],
   )
-  const record = useMemo<CallsPageTableProps['record']>(
+  const record = useMemo<CallsPageTableViewProps['record']>(
     () => ({
       activeRecordId,
       loadingRecordId,
@@ -57,7 +49,7 @@ export const useCallsPageTable = ({
     }),
     [activeRecordId, loadingRecordId, recordError, handleToggleRecord, handleDownloadRecord],
   )
-  const paginationProps = useMemo<CallsPageTableProps['pagination']>(
+  const paginationProps = useMemo<CallsPageTableViewProps['pagination']>(
     () => ({
       pagination,
       onPrevious: onPaginationPrevious,

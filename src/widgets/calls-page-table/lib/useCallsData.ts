@@ -5,7 +5,7 @@ import { type Call, type GetCallsQueryParams, useGetCallsQuery } from '@/entitie
 
 const EMPTY_CALLS: Call[] = []
 
-/** Параметры запроса списка звонков для страницы. */
+/** Параметры запроса списка звонков для таблицы страницы. */
 interface UseCallsDataParams {
   typeFilter: CallTypeFilter
   dateRange: DateRange
@@ -15,7 +15,7 @@ interface UseCallsDataParams {
 }
 
 /**
- * Загружает страницу звонков через RTK Query с учётом фильтров, пагинации и сортировки.
+ * Загружает звонки через RTK Query с учётом фильтров, пагинации и сортировки таблицы.
  *
  * @param params — фильтр типа, диапазон дат, offset и опциональная сортировка для API.
  * @returns Список звонков, общее число строк, флаги загрузки/ошибки и повтор запроса.
