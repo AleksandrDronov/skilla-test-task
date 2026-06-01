@@ -1,7 +1,9 @@
 import { type DateRange } from '@/features/filter-calls-by-period'
 import { mapFilterToApiValue, type CallTypeFilter } from '@/features/filter-calls-by-type'
 import { type SortByApiValue, type SortOrder } from '@/features/sort-calls'
-import { type GetCallsQueryParams, useGetCallsQuery } from '@/entities/call'
+import { type Call, type GetCallsQueryParams, useGetCallsQuery } from '@/entities/call'
+
+const EMPTY_CALLS: Call[] = []
 
 /** Параметры запроса списка звонков для страницы. */
 interface UseCallsDataParams {
@@ -35,7 +37,7 @@ export const useCallsData = ({
   }
 
   const { data, isLoading, isError, refetch } = useGetCallsQuery(queryArgs)
-  const calls = data?.results ?? []
+  const calls = data?.results ?? EMPTY_CALLS
 
   return {
     calls,
