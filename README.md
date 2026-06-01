@@ -12,7 +12,6 @@
 - Redux Toolkit
 - RTK Query
 - Vite
-- Vitest
 
 ## Возможности
 
