@@ -72,7 +72,7 @@ export const useCallAudio = () => {
     [getRecord],
   )
 
-  const handleToggleRecord = useCallback(
+  const onToggleRecord = useCallback(
     async (call: Call) => {
       if (!call.record) {
         return
@@ -103,7 +103,7 @@ export const useCallAudio = () => {
     [controller, loadRecordUrl],
   )
 
-  const handleDownloadRecord = useCallback(
+  const onDownloadRecord = useCallback(
     async (call: Call) => {
       if (!call.record) {
         return
@@ -128,7 +128,7 @@ export const useCallAudio = () => {
     activeRecordId,
     loadingRecordId,
     recordError,
-    handleToggleRecord,
-    handleDownloadRecord,
+    onToggleRecord,
+    onDownloadRecord,
   }
 }

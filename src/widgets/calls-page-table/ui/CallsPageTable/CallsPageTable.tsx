@@ -2,9 +2,9 @@ import { memo, useCallback } from 'react'
 import type { Call } from '@/entities/call'
 import { CallsTable } from '@/features/calls-table'
 import { CallsPagination } from '@/features/paginate-calls'
-import { AudioPlayerPreview } from '@/features/play-call-record'
+import { AudioPlayerPreview, useCallAudio } from '@/features/play-call-record'
 import { SortableColumnHeader } from '@/features/sort-calls'
-import { useCallsPageTable } from '../../lib/useCallsPageTable'
+import { useCallsTableQuery } from '../../lib/useCallsTableQuery'
 import type { CallsPageTableProps, CallsPageTableViewProps } from '../../model/types'
 import { CallsTableStatus } from '../CallsTableStatus/CallsTableStatus'
 
@@ -73,9 +73,10 @@ const CallsPageTableView = ({
 }
 
 const CallsPageTableComponent = ({ filters }: CallsPageTableProps) => {
-  const table = useCallsPageTable(filters)
+  const { query, sort, pagination } = useCallsTableQuery(filters)
+  const record = useCallAudio()
 
-  return <CallsPageTableView {...table} />
+  return <CallsPageTableView query={query} sort={sort} record={record} pagination={pagination} />
 }
 
 export const CallsPageTable = memo(CallsPageTableComponent)
