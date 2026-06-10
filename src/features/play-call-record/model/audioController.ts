@@ -1,4 +1,9 @@
-export type AudioLike = Pick<HTMLAudioElement, 'play' | 'pause' | 'currentTime' | 'onended'>
+export interface AudioLike {
+  play: () => Promise<void>
+  pause: () => void
+  currentTime: number
+  onended: ((event: Event) => void) | null
+}
 
 export const createAudioController = () => {
   let activeId: string | null = null
