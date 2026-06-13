@@ -1,13 +1,12 @@
-import { useCallsPagination } from '@/features/paginate-calls'
+import { useCallsData } from '@/features/calls-table'
+import { useCallsPagination, useResettableCallsPage } from '@/features/paginate-calls'
+import { useCallsSorting } from '@/features/sort-calls'
 import type {
   CallsPageTableFilters,
   CallsPaginationProps,
   CallsQueryProps,
   CallsSortProps,
 } from '../model/types'
-import { useCallsData } from './useCallsData'
-import { useCallsSorting } from './useCallsSorting'
-import { useResettableCallsPage } from './useResettableCallsPage'
 
 export interface CallsTableQueryResult {
   query: CallsQueryProps

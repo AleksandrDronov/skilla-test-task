@@ -1,12 +1,11 @@
 import { memo, useCallback } from 'react'
 import type { Call } from '@/entities/call'
-import { CallsTable } from '@/features/calls-table'
+import { CallsTable, CallsTableStatus } from '@/features/calls-table'
 import { CallsPagination } from '@/features/paginate-calls'
 import { AudioPlayerPreview, useCallAudio } from '@/features/play-call-record'
 import { SortableColumnHeader } from '@/features/sort-calls'
 import { useCallsTableQuery } from '../../lib/useCallsTableQuery'
 import type { CallsPageTableProps, CallsPageTableViewProps } from '../../model/types'
-import { CallsTableStatus } from '../CallsTableStatus/CallsTableStatus'
 
 const CallsPageTableView = ({
   query: { calls, isLoading, isError, onRetry },

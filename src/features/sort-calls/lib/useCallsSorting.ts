@@ -1,11 +1,6 @@
 import { useCallback, useState } from 'react'
-import {
-  defaultCallsSort,
-  getNextSortState,
-  mapSortToApiValue,
-  type CallsSortState,
-  type SortByApiValue,
-} from '@/features/sort-calls'
+import { defaultCallsSort, type CallsSortState, type SortByApiValue } from '../model/types'
+import { getNextSortState, mapSortToApiValue } from './sortState'
 
 /**
  * Управляет сортировкой таблицы звонков по колонкам.
