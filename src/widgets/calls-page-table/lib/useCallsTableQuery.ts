@@ -1,18 +1,7 @@
 import { useCallsData } from '@/features/calls-table'
 import { useCallsPagination, useResettableCallsPage } from '@/features/paginate-calls'
 import { useCallsSorting } from '@/features/sort-calls'
-import type {
-  CallsPageTableFilters,
-  CallsPaginationProps,
-  CallsQueryProps,
-  CallsSortProps,
-} from '../model/types'
-
-export interface CallsTableQueryResult {
-  query: CallsQueryProps
-  sort: CallsSortProps
-  pagination: CallsPaginationProps
-}
+import type { CallsPageTableFilters, CallsTableQueryResult } from '../model/types'
 
 /** Загрузка, сортировка и пагинация таблицы звонков. */
 export const useCallsTableQuery = ({

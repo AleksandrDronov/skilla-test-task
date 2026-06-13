@@ -36,6 +36,12 @@ export interface CallsPaginationProps {
   onNext?: () => void
 }
 
+export interface CallsTableQueryResult {
+  query: CallsQueryProps
+  sort: CallsSortProps
+  pagination: CallsPaginationProps
+}
+
 export interface CallsPageTableViewProps {
   query: CallsQueryProps
   sort: CallsSortProps
