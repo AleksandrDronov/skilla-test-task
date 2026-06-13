@@ -1,4 +1,5 @@
 import { useCallsData } from '@/features/calls-table'
+import { mapFilterToApiValue } from '@/features/filter-calls-by-type'
 import { useCallsPagination, useResettableCallsPage } from '@/features/paginate-calls'
 import { useCallsSorting } from '@/features/sort-calls'
 import type { CallsPageTableFilters, CallsTableQueryResult } from '../model/types'
@@ -13,11 +14,12 @@ export const useCallsTableQuery = ({
   const resetPageKey = `${typeFilter}-${sort.sortBy}-${sort.order}-${period}`
   const { page, offset, setPage } = useResettableCallsPage(resetPageKey)
   const { calls, totalRowsRaw, isLoading, isError, refetch } = useCallsData({
-    typeFilter,
-    dateRange,
+    inOut: mapFilterToApiValue(typeFilter),
+    dateStart: dateRange.dateStart,
+    dateEnd: dateRange.dateEnd,
     offset,
-    sortByApiValue,
-    orderApiValue,
+    sortBy: sortByApiValue,
+    order: orderApiValue,
   })
   const { pagination, onPaginationPrevious, onPaginationNext } = useCallsPagination({
     page,
