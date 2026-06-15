@@ -1,0 +1,24 @@
+.row {
+  background: var(--color-surface);
+}
+
+.cell {
+  height: 52px;
+  padding: 0 0 0 40px;
+  vertical-align: middle;
+}
+
+.label {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.count {
+  margin-left: 6px;
+  color: var(--color-text-header);
+  font-size: 12px;
+  line-height: 16px;
+  vertical-align: super;
+}

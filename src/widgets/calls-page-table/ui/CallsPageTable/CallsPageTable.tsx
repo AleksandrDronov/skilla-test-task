@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import type { Call } from '@/entities/call'
 import { CallsTable, CallsTableStatus } from '@/features/calls-table'
 import { CallsPagination } from '@/features/paginate-calls'
@@ -32,6 +32,13 @@ const CallsPageTableView = ({
     ) : null
 
   const hasData = !isLoading && !isError && calls.length > 0
+  const withinDaySort = useMemo(() => {
+    if (sort.sortBy === 'duration' || sort.sortBy === 'date') {
+      return { sortBy: sort.sortBy, order: sort.order }
+    }
+
+    return undefined
+  }, [sort.sortBy, sort.order])
 
   return (
     <>
@@ -46,6 +53,7 @@ const CallsPageTableView = ({
       {hasData ? (
         <CallsTable
           calls={calls}
+          withinDaySort={withinDaySort}
           timeColumnHeader={
             <SortableColumnHeader
               label="Время"

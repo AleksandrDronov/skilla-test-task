@@ -10,7 +10,7 @@ export const useCallsTableQuery = ({
   period,
   dateRange,
 }: CallsPageTableFilters): CallsTableQueryResult => {
-  const { sort, sortByApiValue, orderApiValue, handleColumnSort } = useCallsSorting()
+  const { sort, handleColumnSort } = useCallsSorting()
   const resetPageKey = `${typeFilter}-${sort.sortBy}-${sort.order}-${period}`
   const { page, offset, setPage } = useResettableCallsPage(resetPageKey)
   const { calls, totalRowsRaw, isLoading, isError, refetch } = useCallsData({
@@ -18,8 +18,6 @@ export const useCallsTableQuery = ({
     dateStart: dateRange.dateStart,
     dateEnd: dateRange.dateEnd,
     offset,
-    sortBy: sortByApiValue,
-    order: orderApiValue,
   })
   const { pagination, onPaginationPrevious, onPaginationNext } = useCallsPagination({
     page,
